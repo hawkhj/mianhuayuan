@@ -2,9 +2,59 @@
 class MailsController extends AppController {
 
 	var $name = 'Mails';
+	var $uses=array('Mail','User','Contacter','Customer');
 	function index($id) {
 		$this->mail->recursive = 0;
-		$this->set('mails', $this->Mail->find('all',array('condition'=>array('contacters'=>'='+$id))));
+		$findContacter=$this->Contacter->read(null, $id);
+
+		$this->set('mails', $this->Mail->find('all',
+					array('conditions'=>array(
+										'From'=>$findContacter['Contacter']['Email']
+											)
+						)
+					)
+				   );
+		
+	}
+	function index_customer($id)
+	{
+		$this->mail->recursive = 0;
+		$findCustomer=$this->Customer->read(null, $id);
+
+		$this->set('mails', $this->Mail->find('all',
+					array('conditions'=>array(
+										'contacters LIKE'=>'%'.$findCustomer['Customer']['Email'].'%'
+											)
+						)
+					)
+				   );
+		
+	}
+	function index_contacter($id)
+	{
+		$this->mail->recursive = 0;
+		$findContacter=$this->Contacter->read(null, $id);
+
+		$this->set('mails', $this->Mail->find('all',
+					array('conditions'=>array(
+										'contacters LIKE'=>'%'.$findContacter['Contacter']['Email'].'%'
+											)
+						)
+					)
+				   );
+	}
+	function index_all($id)
+	{
+		$this->mail->recursive = 0;
+		$findUser=$this->User->read(null, $id);
+
+		$this->set('mails', $this->Mail->find('all',
+					array('conditions'=>array(
+										'PopMailBox'=>$findUser['User']['Email']
+											)
+						)
+					)
+				   );
 	}
 	function view($id)
 	{

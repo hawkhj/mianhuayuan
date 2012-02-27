@@ -31,10 +31,36 @@ function extent()
 	font:10px;
 }
 </style>
-您是(<?php echo $this->Session->read('user');?>)<br />
-<a href="#" onclick="return false;">	全部</a><span id="contacterall" onclick="extent()" class="extent">[-]</span><br />
+您是(<?php echo 
+$html->link( $this->Session->read('user'),array('controller'=>'mails','action' => 'index_all',$this->Session->read('username')),array('target'=>'right'));?>)<br />
+<a href="#"	>联系人</a><span id="contacterall" onclick="extent()" class="extent">[-]</span><br />
 <div id="contactercontent">
-	<?php foreach ($Contacters as $condition): ?>
-	<div id="contacter" name="name">|-<?php echo $html->link( $condition['Contacter']['ContactName'],array('controller'=>'mails','action' => 'index',$condition['Contacter']['ContacterId']),array('target'=>'right')); ?></div>
-	<?php endforeach; ?>
+	
+	<?php
+	
+	for($i=0;$i<count($listtree);$i++){
+		if($listtree[$i]['lvl']==0)
+		{
+			echo "<div id=\"customer\" name=\"name\">&nbsp;&nbsp;";
+			echo $html->link( $listtree[$i]['title'],
+								array(	'controller'=>'mails',
+										'action' => 'index_customer',
+										$listtree[$i]['id']
+									  ),
+								array('target'=>'right'));
+			echo "</div>";
+		}
+		if($listtree[$i]['lvl']==1)
+		{
+			echo "<div id=\"contacter\" name=\"name\">&nbsp;&nbsp;&nbsp;&nbsp;|-";
+			echo $html->link( $listtree[$i]['title'],
+								array(	'controller'=>'mails',
+										'action' => 'index_contacter',
+										$listtree[$i]['id']
+									  ),
+								array('target'=>'right'));
+			echo "</div>";
+		}
+	}
+	?>
 </div>

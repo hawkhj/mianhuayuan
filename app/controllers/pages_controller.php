@@ -44,7 +44,7 @@
  * @var array
  * @access public
  */
-	var $uses=array('Contacter','Category','User');
+	var $uses=array('Contacter','Category','User','Customer');
 /**
  * Default helper
  *
@@ -93,7 +93,7 @@
 		{
 			array_push($list,array('更改个人信息',array('controller'=>'Users','action' => 'edit',$this->Session->read('username')),array('target'=>'right','onclick'=>"window.parent.document.getElementById('left').src='/pages/left'")));
 			array_push($list,array('客户管理',array('controller'=>'customers','action' => 'index_first'),array('target'=>'right','onclick'=>"window.parent.document.getElementById('left').src='/pages/LeftCustomer'")));
-			array_push($list,array('邮件管理',array('controller'=>'pages','action' => 'LeftMailManage'),array('target'=>'left')));
+			array_push($list,array('邮件管理',array('controller'=>'pages','action' => 'LeftMailManage'),array('target'=>'left','onclick'=>"window.parent.document.getElementById('right').src='/mails/index_all/".$this->Session->read('username')."'")));
 			array_push($list,array('产品管理',array('controller'=>'pages','action' => 'LeftProductManage'),array('target'=>'left')));
 			array_push($list,array('报价管理',array('controller'=>'customers','action' => 'index'),array('target'=>'right','onclick'=>"window.parent.document.getElementById('left').src='/pages/left'")));
 			
@@ -108,7 +108,38 @@
 		$this->set('list',$list);
 	}
 	function index()
-	{$this->layout = 'default';}
+	{
+		$this->helpers[] = 'DataUtil';
+		//$this->Customer->recursive = 0;
+		
+		
+		$us = $this->User->find('all');
+		$rows_data = array();
+		foreach($us as $user)
+		{
+			if($user['User']['username']==$this->Session->read('user'))
+			{
+				$u_name = $user['User']['username'];
+				$c1=array();
+				$c1=$this->Customer->find('all',array(
+				'conditions'=>array(
+					'Permission' => $user['User']['Id'],
+					'CustomerType'=>1
+									)));
+				$c0=array();
+				$c0=$this->Customer->find('all',array(
+				'conditions'=>array(
+					'Permission' => $user['User']['Id'],
+					'CustomerType'=> 0
+									)));
+				$mn=0;
+				
+				array_push($rows_data,array('name'=>$u_name,'c1'=>count($c1),'c0'=>count($c0),'mn'=>$mn));
+			}
+		}
+		$this->set('rows',$rows_data);
+
+	}
 	function left()
 	{$this->layout = 'default';}
 	function LeftCustomer()
@@ -120,11 +151,42 @@
 	function LeftMailManage()
 	{
 		$this->layout = 'default';
-		
-		$this->set('Contacters', $this->Contacter->find('all',array(
+		$Customers = $this->Customer->find('all',array(
 			'conditions'=>array(
-				'BelongToUsersIds'=>' like "%'+$this->Session->read('username')+'%"'
-								))));
+				'Permission'=>' like "%'+$this->Session->read('username')+'%"'
+								)));
+		$listtree=array(); 
+		$n=0;
+		
+		foreach($Customers as $Customer)
+		{
+			array_push($listtree,array(
+								'title'=>$Customer['Customer']['CompName'],
+								'email'=>$Customer['Customer']['Email'],
+								'name' =>$Customer['Customer']['CompContact'],
+								'id'=>$Customer['Customer']['Id'],
+								'index'=>$n,
+								'lvl'=>0
+								));
+			$Contacters = $this->Contacter->find('all',array(
+				'conditions'=>array(
+					'CustomerId'=>$Customer['Customer']['Id']
+									)));
+			foreach($Contacters as $Contacter)
+			{
+				$n=$n+1;
+				array_push($listtree,array(
+								'title'=>$Contacter['Contacter']['ContactName'],
+								'email'=>$Contacter['Contacter']['Email'],
+								'name' =>$Contacter['Contacter']['ContactName'],
+								'id' => $Contacter['Contacter']['ContacterId'],
+								'index'=>$n,
+								'lvl'=>1
+								));
+			}
+			$n=$n+1;
+		}
+		$this->set('listtree',$listtree);
 	}
 	function LeftProductManage()
 	{

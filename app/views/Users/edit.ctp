@@ -4,6 +4,7 @@ $where=true;
 			$where=false;
 		}
 ?>
+<?echo $this->Session->flash();?>
 <div class="users" style="<?php if(!$where){echo 'float:left';}?>">
 <?php echo $this->Form->create('User');?>
 	<fieldset>
