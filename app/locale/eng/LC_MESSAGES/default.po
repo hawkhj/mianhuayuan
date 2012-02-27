@@ -1,0 +1,6 @@
+msgid "UserLoginTitle"
+msgstr "天悦家居管理系统"
+msgid "UserLoginUserName"
+msgstr "用户名"
+msgid "UserLoginPwd"
+msgstr "密码"
