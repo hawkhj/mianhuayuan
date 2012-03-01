@@ -11,6 +11,8 @@
 	<?php
 	
 	$i = 0;
+	if($rows !=null)
+	{
 	foreach ($rows as $row):
 		$class = null;
 		if ($i++ % 2 == 0) {
@@ -25,7 +27,8 @@
 		<td><?php echo $row['mn']; ?>&nbsp;</td>
 		
 	</tr>
-<?php endforeach; ?>
+<?php endforeach; 
+	}?>
 	</table>
 	
 </div>

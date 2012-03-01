@@ -7,7 +7,11 @@ class ContactersController extends AppController {
 		$this->Contacter->recursive = 0;
 		$this->set('contacters', $this->paginate());
 	}
-
+	function index_customer($id){
+		$this->Contacter->recursive = 0;
+		$this->set('contacters', $this->paginate(array('CustomerId'=>$id)));
+		$this->set('id',$id);
+	}
 	function view($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid contacter', true));
@@ -16,16 +20,19 @@ class ContactersController extends AppController {
 		$this->set('contacter', $this->Contacter->read(null, $id));
 	}
 
-	function add() {
+	function add($id) {
 		if (!empty($this->data)) {
 			$this->Contacter->create();
 			if ($this->Contacter->save($this->data)) {
+				$this->data['Contacter']['AddUser']=$this->Session->read('user')."[".$this->Session->read('username')."]";
+				$this->data['Contacter']['AddDate']=date("Y-m-d H:i:s");
 				$this->Session->setFlash(__('The contacter has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The contacter could not be saved. Please, try again.', true));
 			}
 		}
+		$this->set('id',$id);
 	}
 
 	function edit($id = null) {

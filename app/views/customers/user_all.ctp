@@ -46,7 +46,7 @@
 		<!--<td><?php //echo $customer['Customer']['CompURL']; ?>&nbsp;</td>-->
 		<td><?php echo $this->DataUtil->getCustomerTypeName($customer['Customer']['CustomerType']); ?></td>
 		<td><?php echo $customer['Customer']['CompContact']; ?>&nbsp;</td>
-		<td><?php echo $customer['Customer']['Email']; ?>&nbsp;</td>
+		<td><a href="/pages/LeftMailManage"  target="left" onclick="window.parent.document.getElementById('right').src='/mails/index_customer/<?php echo $customer['Customer']['Id'] ?>'" title="查看邮箱"><?php echo $customer['Customer']['Email']; ?>&nbsp;</a></td>
 		<!--<td><?php //echo $customer['Customer']['MSN']; ?>&nbsp;</td>-->
 		<!--<td><?php //echo $customer['Customer']['SKYPE']; ?>&nbsp;</td>-->
 		<!--<td><?php //echo $customer['Customer']['Mobile']; ?>&nbsp;</td>-->
@@ -68,7 +68,7 @@
 		<td class="actions">
 			<?php echo $this->Html->link(__('查看', true), array('action' => 'view', $customer['Customer']['Id'])); ?>
 			<?php echo $this->Html->link(__('编辑', true), array('action' => 'edit', $customer['Customer']['Id'])); ?>
-			<?php echo $this->Html->link(__('查看其他联络人', true), array('controller'=>'contacters','action' => 'index', $customer['Customer']['Id'])); ?>
+			<?php echo $this->Html->link(__('查看其他联络人', true), array('controller'=>'contacters','action' => 'index_customer', $customer['Customer']['Id'])); ?>
 				<?php ?>
 				<?php
 				if($this->Session->read('Lvl')=='0'){ 

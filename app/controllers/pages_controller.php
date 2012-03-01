@@ -44,7 +44,7 @@
  * @var array
  * @access public
  */
-	var $uses=array('Contacter','Category','User','Customer');
+	var $uses=array('Contacter','Category','User','Customer','Mail');
 /**
  * Default helper
  *
@@ -132,7 +132,14 @@
 					'Permission' => $user['User']['Id'],
 					'CustomerType'=> 0
 									)));
-				$mn=0;
+				$mn= count($this->Mail->find('all',
+				array(
+					'conditions'=>array(
+									'PopMailBox'=>$user['User']['Email']
+										)
+				)
+				));
+				//$mn=0;
 				
 				array_push($rows_data,array('name'=>$u_name,'c1'=>count($c1),'c0'=>count($c0),'mn'=>$mn));
 			}

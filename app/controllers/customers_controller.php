@@ -1,43 +1,74 @@
 <?php
 App::import('Sanitize');
 class CustomersController extends AppController {
-	var $uses = array('Customer','User');
+	var $uses = array('Customer','User','Mail');
 	var $name = 'Customers';
-	
+	var $components = array('funtions');
 	function index() {
 		$this->helpers[] = 'DataUtil';
 		$this->Customer->recursive = 0;
 		$this->set('customers', $this->paginate());
 	}
+	
 	function index_first() {
+		
 		$this->helpers[] = 'DataUtil';
 		//$this->Customer->recursive = 0;
 		
 		
-		$us = $this->User->find('all');
+		$us = $this->User->find('all',array('conditions'=>'Id='.$this->Session->read('username')));
 		$rows_data = array();
-		foreach($us as $user)
-		{
-			$u_name = $user['User']['username'];
-			$c1=array();
-			$c1=$this->Customer->find('all',array(
-			'conditions'=>array(
-				'Permission' => $user['User']['Id'],
-				'CustomerType'=>1
-								)));
-			$c0=array();
-			$c0=$this->Customer->find('all',array(
-			'conditions'=>array(
-				'Permission' => $user['User']['Id'],
-				'CustomerType'=> 0
-								)));
-			$mn=0;
-			
-			array_push($rows_data,array('name'=>$u_name,'c1'=>count($c1),'c0'=>count($c0),'mn'=>$mn));
-		}
+		
+		
+		$u_name = $us[0]['User']['username'];
+		$c1=array();
+		$c1=$this->Customer->find('all',array(
+		'conditions'=>array(
+			'Permission' => $us[0]['User']['Id'],
+			'CustomerType'=>1
+							)));
+		$c0=array();
+		$c0=$this->Customer->find('all',array(
+		'conditions'=>array(
+			'Permission' => $us[0]['User']['Id'],
+			'CustomerType'=> 0
+							)));
+		//$mn=0;
+		$mn= count($this->Mail->find('all',
+				array(
+					'conditions'=>array(
+					'PopMailBox'=>$us[0]['User']['Email']
+						)
+		)
+		));
+		array_push($rows_data,array('name'=>$u_name,'c1'=>count($c1),'c0'=>count($c0),'mn'=>$mn));
+		$rows_data = $this->funtions->buildtree($rows_data,$this->Session->read('username'),"");
+//			
+//			
+//		foreach($us as $user)
+//		{
+//			$u_name = $user['User']['username'];
+//			$c1=array();
+//			$c1=$this->Customer->find('all',array(
+//			'conditions'=>array(
+//				'Permission' => $user['User']['Id'],
+//				'CustomerType'=>1
+//								)));
+//			$c0=array();
+//			$c0=$this->Customer->find('all',array(
+//			'conditions'=>array(
+//				'Permission' => $user['User']['Id'],
+//				'CustomerType'=> 0
+//								)));
+//			$mn=0;
+//			
+//			array_push($rows_data,array('name'=>$u_name,'c1'=>count($c1),'c0'=>count($c0),'mn'=>$mn));
+//			
+//		}
 		$this->set('rows',$rows_data);
 		
 	}
+	
 	function CustImport() {
 		$this->Customer->recursive = 0;
 		$this->set('customers', $this->paginate(array('CustomerType'=>'0')));

@@ -53,7 +53,7 @@ if( $this->Session->read('Lvl')<3)
 	{
 		if($User['User']['Id']==$this->Session->read('username'))
 		{
-			echo '<li>'.$html->link($User['User']['username'],array('controller'=>'customers','action' => 'UserAll',$User['User']['Id']),array('target'=>'right')).'</li>';
+			echo '<li>'.$html->link($User['User']['username'],array('controller'=>'customers','action' => 'UserAll',$User['User']['Id']),array('target'=>'right','title'=>'Email:'.$User['User']['Email'])).'</li>';
 			$this->DataUtil->listsubUser($Users,$User['User']['Id']);
 		}
 	}

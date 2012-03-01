@@ -22,9 +22,9 @@
 			<?php echo $mail['Mail']['HTMLBody']; ?>
 			&nbsp;
 		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>>附件</dt>
+		<dt<?php if ($i % 2 == 0) echo $class;?>>原始邮件</dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $mail['Mail']['Attachments']; ?>
+			<a href="/mails/downsmail/<?php echo $mail['Mail']['Id']?>" target="_blank">下载</a>
 			&nbsp;
 		</dd>
 	</dl>

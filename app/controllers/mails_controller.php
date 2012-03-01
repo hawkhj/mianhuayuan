@@ -20,7 +20,7 @@ class MailsController extends AppController {
 	{
 		$this->mail->recursive = 0;
 		$findCustomer=$this->Customer->read(null, $id);
-
+		$this->set('customer',$findCustomer);
 		$this->set('mails', $this->Mail->find('all',
 					array('conditions'=>array(
 										'contacters LIKE'=>'%'.$findCustomer['Customer']['Email'].'%'
@@ -57,6 +57,14 @@ class MailsController extends AppController {
 				   );
 	}
 	function view($id)
+	{
+		if (!$id) {
+			$this->Session->setFlash(__('不存在的邮件', true));
+			$this->redirect(array('action' => 'index',$id));
+		}
+		$this->set('mail', $this->Mail->read(null, $id));
+	}
+	function downsmail($id)
 	{
 		if (!$id) {
 			$this->Session->setFlash(__('不存在的邮件', true));

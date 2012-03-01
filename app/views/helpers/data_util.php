@@ -89,7 +89,7 @@
 				if($user['User']['Parent']==$parent)
 				{
 					//echo '<li>'.$html->link($user['User']['username'],array('controller'=>'customers','action' => 'UserAll','uid'=>$user['User']['Id']),array('target'=>'right')).'</li>';
-					echo '<li><a href="/customers/UserAll/'.$user['User']['Id'].'" target="right">'.$user['User']['username'].'</a></li>';
+					echo '<li><a href="/customers/UserAll/'.$user['User']['Id'].'" target="right" title="Email:'.$user['User']['Email'].'">'.$user['User']['username'].'</a></li>';
 					$this->listsubUser($users,$user['User']['Id']);
 				}
 			}

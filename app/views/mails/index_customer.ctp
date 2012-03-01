@@ -8,7 +8,7 @@
 ?>
 
 
-<h1>客户邮件列表</h1>
+<h1>客户[<?php echo $customer['Customer']['CompName']?>](<?php echo $customer['Customer']['CompContact']?>)邮件列表</h1>
 <table>
 	<tr>
 		<th>Id</th>

@@ -1,6 +1,7 @@
 <?php
 class Customer extends AppModel {
 	var $name = 'Customer';
+
 	var $primaryKey = 'Id';
 	var $validate = array(
 		'Id' => array(
@@ -75,6 +76,7 @@ class Customer extends AppModel {
 		//	),
 		//),
 	);
+	
 	//function getCustomerList()
 	//{
 	//	return $this->query("select Permission,count(*) from customers group by permission ");
